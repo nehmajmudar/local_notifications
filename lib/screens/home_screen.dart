@@ -132,14 +132,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   print("SImple button pressed later");
                 },
                 child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width/3,
+                  alignment: Alignment.center,
                   margin: const EdgeInsets.only(top: 80),
-                  child: const Text("Simple",style: TextStyle(fontSize: 50)),
+                  child: const Text("Simple",style: TextStyle(fontSize: 15)),
                   decoration: isSelected?const BoxDecoration(
                     color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(20))
+                    borderRadius: BorderRadius.all(Radius.circular(8))
                   ):const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ),
                 ),
               ),
@@ -153,14 +156,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   print("Scheduled notification button pressed later");
                 },
                 child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width/3,
+                  alignment: Alignment.center,
                   margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Scheduled",style: TextStyle(fontSize: 50)),
+                  child: const Text("Scheduled",style: TextStyle(fontSize: 15)),
                   decoration: isSimpleSelected?const BoxDecoration(
                       color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ):const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ),
                 ),
               ),
@@ -174,14 +180,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   print("Period notification button pressed later");
                 },
                 child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width/3,
+                  alignment: Alignment.center,
                   margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Periodic",style: TextStyle(fontSize: 50)),
+                  child: const Text("Periodic",style: TextStyle(fontSize: 15)),
                   decoration: isPeriodSelected?const BoxDecoration(
                       color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ):const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ),
                 ),
               ),
@@ -195,14 +204,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   print("Period notification button pressed later");
                 },
                 child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width/3,
+                  alignment: Alignment.center,
                   margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Insistent",style: TextStyle(fontSize: 50)),
+                  child: const Text("Insistent",style: TextStyle(fontSize: 15)),
                   decoration: isInsistent?const BoxDecoration(
                       color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ):const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ),
                 ),
               ),
@@ -216,14 +228,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   print("Progress notification button pressed later");
                 },
                 child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width/3,
+                  alignment: Alignment.center,
                   margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Progress",style: TextStyle(fontSize: 50)),
+                  child: const Text("Progress",style: TextStyle(fontSize: 15)),
                   decoration: didProgress?const BoxDecoration(
                       color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ):const BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                   ),
                 ),
               ),

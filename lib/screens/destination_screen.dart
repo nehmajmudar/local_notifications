@@ -12,7 +12,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text("Destination screen",style: TextStyle(fontSize: 50),),
+        child: Text("Destination screen",style: TextStyle(fontSize: 15),),
       ),
     );
   }
