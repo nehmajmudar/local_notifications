@@ -1,11 +1,7 @@
-import 'dart:typed_data';
+import 'dart:async';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:local_notifications/main.dart';
-import 'package:local_notifications/screens/destination_screen.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,236 +10,145 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late Animation<double> animationWifi;
+  late AnimationController controllerWifi;
+  late Animation<double> animationCell;
+  late AnimationController controllerCell;
+  late Animation<double> animationDisconnect;
+  late AnimationController controllerDisconnect;
+  bool wifiSelected = false;
+  bool cellSelected = false;
+  bool disconnected = false;
+  bool isVisible = false;
 
-  bool isSelected=false;
-  bool isSimpleSelected=false;
-  bool isPeriodSelected=false;
-  bool isInsistent=false;
-  bool didProgress=false;
+  // bool isVisible=false;
 
-  @override
-  void initState() {
-    tz.initializeTimeZones();
-    super.initState();
-    init();
-  }
+  late StreamSubscription subscription;
+  // ConnectivityResult connectionResult = ConnectivityResult.none;
 
-  Future<void> init()async{
-    var androidSettings=const AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initSettings=InitializationSettings(android: androidSettings);
-    await flutterLocalNotificationsPlugin.initialize(initSettings,onSelectNotification: onClickNotification);
-  }
-
-  Future<void> onClickNotification(String? payload)async{
-    await Navigator.of(context).push(MaterialPageRoute(builder: (context){return const DestinationScreen();}));
-  }
-
-  void showNotification() {
-    flutterLocalNotificationsPlugin.show(
-        0,
-        "Simple notification",
-        "This is a simple notification",
-        const NotificationDetails(
-            android: AndroidNotificationDetails("simple_channel", "Simple notification",
-                channelDescription: "channel_description",
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
-  }
-
-  Future<void> scheduledNotification()async{
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-        129,
-        "Scheduled notification",
-        "This was a scheduled notification",
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
-        const NotificationDetails(
-          android: AndroidNotificationDetails('channel', 'channel_schedule',
-            channelDescription: 'This is a scheduled notification',
-            icon: '@mipmap/ic_launcher'
-          ),
-        ), uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
-  }
-
-  Future<void> showPeriodicNotification()async{
-    await flutterLocalNotificationsPlugin.periodicallyShow(234, "periodic", "Periodic notification", RepeatInterval.everyMinute,
-      const NotificationDetails(
-        android: AndroidNotificationDetails("periodic channel", "period",channelDescription: "channel_descri",icon: '@mipmap/ic_launcher')
-      )
-    );
-  }
-
-  Future<void> showProgressNotification() async {
-    const int maxProgress = 6;
-    for (int i = 0; i <= maxProgress; i++) {
-      await Future<void>.delayed(const Duration(seconds: 2), () async {
-        final AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails('channel_id', 'Channel Name', channelDescription: 'progress_channel',
-            channelShowBadge: false,
-            importance: Importance.max,
-            priority: Priority.high,
-            onlyAlertOnce: true,
-            showProgress: true,
-            maxProgress: maxProgress,
-            progress: i);
-        final NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
-        await flutterLocalNotificationsPlugin.show(0, 'Flutter Local Notification', 'Flutter Progress Notification',
-            notificationDetails);
-      });
+  void connectivityStatus(ConnectivityResult result) {
+    if(result==ConnectivityResult.wifi){
+      controllerWifi.forward();
+      controllerCell.reverse();
+      controllerDisconnect.reverse();
+    }
+    else if(result == ConnectivityResult.mobile){
+      controllerWifi.reverse();
+      controllerCell.forward();
+      controllerDisconnect.reverse();
+    }
+    else if(result == ConnectivityResult.none || isVisible!=true){
+      isVisible=true;
+      controllerWifi.reverse();
+      controllerCell.reverse();
+      controllerDisconnect.forward();
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    subscription =
+        Connectivity().onConnectivityChanged.listen(connectivityStatus);
+
+    controllerWifi = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    animationWifi = Tween<double>(begin: 50, end: 70).animate(controllerWifi);
+    controllerWifi.addListener(() {
+      setState(() {});
+    });
+
+    controllerCell = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    animationCell = Tween<double>(begin: 50, end: 70).animate(controllerCell);
+    controllerCell.addListener(() {
+      setState(() {});
+    });
+
+    controllerDisconnect = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    animationDisconnect =
+        Tween<double>(begin: 50, end: 70).animate(controllerDisconnect);
+    controllerDisconnect.addListener(() {
+      setState(() {});
+    });
+
+  }
 
 
-  Future<void> showInsistentNotification()async{
-    int insistentFlag=5;
-    await flutterLocalNotificationsPlugin.show(156, "insistent", "Insistent notification",
-      NotificationDetails(
-        android: AndroidNotificationDetails("insistent channel", "Insistence",channelDescription: "channel_insistence",
-            importance: Importance.high,
-            priority: Priority.high,
-            ticker: 'ticker',
-            additionalFlags: Int32List.fromList(<int>[insistentFlag]),
-            icon: '@mipmap/ic_launcher')
-      )
-    );
+  @override
+  void dispose() {
+    controllerWifi.dispose();
+    controllerCell.dispose();
+    controllerDisconnect.dispose();
+    super.dispose();
+    subscription.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
+    // print(connectionResult);
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text("Press for demo of notification"),
+        title: const Text("Task"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: (){
-                  setState(() {
-                    isSelected=!isSelected;
-                  });
-                  print("SImple button pressed");
-                  showNotification();
-                  print("SImple button pressed later");
-                },
-                child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width/3,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 80),
-                  child: const Text("Simple",style: TextStyle(fontSize: 15)),
-                  decoration: isSelected?const BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(8))
-                  ):const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
+      body: Container(
+        margin: const EdgeInsets.only(top: 70),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            AnimatedBuilder(
+                animation: animationWifi,
+                builder: (context, child) {
+                  return Container(
+                    height: animationWifi.value,
+                    width: animationWifi.value,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(animationWifi.value))),
+                    child: const Icon(
+                      Icons.wifi,
+                      size: 40,
+                    ),
+                  );
+                }),
+            AnimatedBuilder(
+              animation: animationCell,
+              builder: (context,child){
+                return Container(
+                  height: animationCell.value,
+                  width: animationCell.value,
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle
                   ),
-                ),
-              ),
-              GestureDetector(
-                onTap: (){
-                  setState(() {
-                    isSimpleSelected=!isSimpleSelected;
-                  });
-                  print("Scheduled notification button pressed");
-                  scheduledNotification();
-                  print("Scheduled notification button pressed later");
+                  child: const Icon(Icons.signal_cellular_alt,size: 40,),
+                );
+              },
+            ),
+            Visibility(
+              visible: isVisible,
+              child: AnimatedBuilder(
+                animation: animationDisconnect,
+                builder: (context,child){
+                  return Container(
+                    height: animationDisconnect.value,
+                    width: animationDisconnect.value,
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle
+                    ),
+                    child: const Icon(Icons.no_cell,size: 40,),
+                  );
                 },
-                child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width/3,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Scheduled",style: TextStyle(fontSize: 15)),
-                  decoration: isSimpleSelected?const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ):const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                ),
               ),
-              GestureDetector(
-                onTap: (){
-                  setState(() {
-                    isPeriodSelected=!isPeriodSelected;
-                  });
-                  print("Period notification button pressed");
-                  showPeriodicNotification();
-                  print("Period notification button pressed later");
-                },
-                child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width/3,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Periodic",style: TextStyle(fontSize: 15)),
-                  decoration: isPeriodSelected?const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ):const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: (){
-                  setState(() {
-                    isInsistent=!isInsistent;
-                  });
-                  print("Period notification button pressed");
-                  showInsistentNotification();
-                  print("Period notification button pressed later");
-                },
-                child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width/3,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Insistent",style: TextStyle(fontSize: 15)),
-                  decoration: isInsistent?const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ):const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: (){
-                  setState(() {
-                    didProgress=!didProgress;
-                  });
-                  print("Progress notification button pressed");
-                  showProgressNotification();
-                  print("Progress notification button pressed later");
-                },
-                child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width/3,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 40),
-                  child: const Text("Progress",style: TextStyle(fontSize: 15)),
-                  decoration: didProgress?const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ):const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
