@@ -37,6 +37,7 @@ dependencies:
   flutter_local_notifications: ^9.6.0
   timezone: ^0.8.0
   connectivity_plus: ^2.3.3
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,9 @@ dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:
+
+  assets:
+    - assets/images/menu.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
