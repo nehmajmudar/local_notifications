@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:local_notifications/res/app_colors.dart';
 import 'package:local_notifications/res/app_strings.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmF0aHJvb218ZW58MHx8MHx8&w=1000&q=80',
     'https://images.unsplash.com/photo-1616486886892-ff366aa67ba4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8ZGluaW5nJTIwcm9vbXxlbnwwfHwwfHw%3D&w=1000&q=80',
   ];
+  int _currentIndex=0;
   final GlobalKey<ScaffoldState> scaffoldKey=GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -95,8 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     scaffoldKey.currentState?.openDrawer();
                   },
                   child: Container(
-                    height: 20,
-                    width: 20,
+                    height: MediaQuery.of(context).size.height/42.2,
+                    width: MediaQuery.of(context).size.height/42.2,
                     margin: EdgeInsets.only(bottom: 10,left: MediaQuery.of(context).size.width/19.5,),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
@@ -109,16 +111,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   children: [
                     SizedBox(
-                      height: 50,
-                      width: (MediaQuery.of(context).size.width)-60,
+                      height: MediaQuery.of(context).size.height/15.84,
+                      width: (MediaQuery.of(context).size.width)-(MediaQuery.of(context).size.height/13.2),
                     ),
                     Container(
-                      height: 50,
-                      width: 60,
+                      height: MediaQuery.of(context).size.height/15.84,
+                      width: MediaQuery.of(context).size.height/13.2,
                       alignment: Alignment.center,
                       child: Container(
-                        height: 40,
-                        width: 40,
+                        height: MediaQuery.of(context).size.height/19.8,
+                        width: MediaQuery.of(context).size.height/19.8,
                         child: Icon(Icons.add,color: AppColors.colorGrey,),
                         decoration: BoxDecoration(
                           color: AppColors.colorWhite,
@@ -182,6 +184,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       return RoomCard(roomType: roomType[index], roomRating: roomRating[index], imageUrl: roomImageUrl[index]);
                     },
                     options: CarouselOptions(
+                      onPageChanged: (index,reason){
+                        setState(() {
+                          _currentIndex=index;
+                        });
+                      },
                       height: MediaQuery.of(context).size.height/1.8,
                       enableInfiniteScroll: false,
                       enlargeCenterPage: true,
@@ -220,6 +227,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   //   ],
                   // ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: roomImageUrl.map((urlOfItem) {
+                    int index = roomImageUrl.indexOf(urlOfItem);
+                    return Container(
+                      width: 50.0,
+                      height: 7.5,
+                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      decoration: BoxDecoration(
+                        color: _currentIndex == index
+                            ? Colors.orangeAccent
+                            : Colors.white,
+                      ),
+                    );
+                  }).toList(),
+                )
               ],
             ),
           ),
