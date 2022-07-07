@@ -10,32 +10,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Color _newColor=Colors.yellow;
+  // double _newValue=0;
+  int opaqueValue=10;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.colorGrey,
-        title: const Text("Hero"),
+        title: Text("Tween Animation"),
         centerTitle: true,
+        backgroundColor: AppColors.colorGrey,
       ),
-      body: Center(
-        child: GestureDetector(
-          onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const NextScreen()));
-          },
-          child: Hero(
-            tag: 'button',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
             child: Container(
-              height: 100,
-              width: 100,
-              alignment: Alignment.center,
-              child: const Text("Click for hero effect"),
-              decoration: const BoxDecoration(
-                color: Colors.blueAccent
+              height: 300,
+              width: 300,
+              child: TweenAnimationBuilder(
+                tween: IntTween(begin: 1,end: 10),
+                duration: Duration(seconds: 10),
+                builder: (BuildContext context,int i,Widget? child){
+                  return Center(
+                    child: Text("13 x ${i} = ${13*i}",style: TextStyle(fontSize: 30,color: Colors.black),),
+                  );
+                }
               ),
             ),
           ),
-        )
+          // Center(
+          //   child: TweenAnimationBuilder(
+          //     tween: IntTween(begin: 1,end: 10),
+          //     duration: const Duration(seconds: 10),
+          //     builder: (BuildContext context,int i, Widget? Child){
+          //       return Text("The multiplier: ${i} ");
+          //     }
+          //   ),
+          // )
+          // Slider.adaptive(
+          //   value: _newValue,
+          //   onChanged: (double value){
+          //     setState(() {
+          //       _newValue=value;
+          //       _newColor=Color.lerp(Colors.blue, Colors.green, value)!;
+          //     });
+          //   }
+          // )
+        ],
       ),
     );
   }
