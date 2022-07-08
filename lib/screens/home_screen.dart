@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:local_notifications/res/app_colors.dart';
-import 'package:local_notifications/screens/next_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,55 +9,43 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Color _newColor=Colors.yellow;
-  // double _newValue=0;
-  int opaqueValue=10;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tween Animation"),
+        title: Text("Screen utils pulgin"),
         centerTitle: true,
-        backgroundColor: AppColors.colorGrey,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Container(
-              height: 300,
-              width: 300,
-              child: TweenAnimationBuilder(
-                tween: IntTween(begin: 1,end: 10),
-                duration: Duration(seconds: 10),
-                builder: (BuildContext context,int i,Widget? child){
-                  return Center(
-                    child: Text("13 x ${i} = ${13*i}",style: TextStyle(fontSize: 30,color: Colors.black),),
-                  );
-                }
-              ),
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+              height: ScreenUtil().setHeight(100),
+              width: ScreenUtil().setWidth(300),
+              color: Colors.blue,
             ),
-          ),
-          // Center(
-          //   child: TweenAnimationBuilder(
-          //     tween: IntTween(begin: 1,end: 10),
-          //     duration: const Duration(seconds: 10),
-          //     builder: (BuildContext context,int i, Widget? Child){
-          //       return Text("The multiplier: ${i} ");
-          //     }
-          //   ),
-          // )
-          // Slider.adaptive(
-          //   value: _newValue,
-          //   onChanged: (double value){
-          //     setState(() {
-          //       _newValue=value;
-          //       _newColor=Color.lerp(Colors.blue, Colors.green, value)!;
-          //     });
-          //   }
-          // )
-        ],
+            Container(
+              height: ScreenUtil().setHeight(100),
+              width: ScreenUtil().setWidth(300),
+              color: Colors.red,
+            ),
+            Container(
+              height: ScreenUtil().setHeight(100),
+              width: ScreenUtil().setWidth(300),
+              color: Colors.green,
+            ),
+            Container(
+              height: ScreenUtil().setHeight(100),
+              width: ScreenUtil().setWidth(300),
+              color: Colors.brown,
+            ),
+            Container(
+              height: ScreenUtil().setHeight(100),
+              width: ScreenUtil().setWidth(300),
+              color: Colors.yellow,
+            ),
+          ],
+        ),
       ),
     );
   }
