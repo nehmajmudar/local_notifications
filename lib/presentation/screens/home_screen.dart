@@ -45,14 +45,14 @@ class _HomeState extends State<Home> {
                   children: <Widget>[
                     ExpansionTile(
                       title: Text(
-                        state.jokeModel.id!.toString(),
+                        state.jokeModel.setup!.toString(),
                         textAlign: TextAlign.center,
                       ),
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            state.jokeModel.title!,
+                            state.jokeModel.delivery!,
                             style: const TextStyle(
                               fontSize: 20,
                             ),
@@ -61,6 +61,12 @@ class _HomeState extends State<Home> {
                         ),
                       ],
                     ),
+                    FloatingActionButton(
+                      onPressed: (){
+                        BlocProvider.of<JokeBloc>(context).add(GetJoke());
+                      },
+                      child: Text("Press"),
+                    )
                   ],
                 ),
               );

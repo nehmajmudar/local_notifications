@@ -10,24 +10,84 @@ String jokeModelToJson(JokeModel data) => json.encode(data.toJson());
 
 class JokeModel {
   JokeModel({
-    this.userId,
+    this.error,
+    this.category,
+    this.type,
+    this.setup,
+    this.delivery,
+    this.flags,
     this.id,
-    this.title,
+    this.safe,
+    this.lang,
   });
 
-  int? userId;
+  bool? error;
+  String? category;
+  String? type;
+  String? setup;
+  String? delivery;
+  Flags? flags;
   int? id;
-  String? title;
+  bool? safe;
+  String? lang;
 
   factory JokeModel.fromJson(Map<String, dynamic> json) => JokeModel(
-    userId: json["userId"]==null?null:json["userId"],
-    id: json["id"]==null?null:json["id"],
-    title: json["title"]==null?null:json["title"]
+    error: json["error"],
+    category: json["category"],
+    type: json["type"],
+    setup: json["setup"],
+    delivery: json["delivery"],
+    flags: Flags.fromJson(json["flags"]),
+    id: json["id"],
+    safe: json["safe"],
+    lang: json["lang"],
   );
 
   Map<String, dynamic> toJson() => {
-    "userId": userId,
+    "error": error,
+    "category": category,
+    "type": type,
+    "setup": setup,
+    "delivery": delivery,
+    "flags": flags!.toJson(),
     "id": id,
-    "title": title,
+    "safe": safe,
+    "lang": lang,
+  };
+}
+
+class Flags {
+  Flags({
+    this.nsfw,
+    this.religious,
+    this.political,
+    this.racist,
+    this.sexist,
+    this.explicit,
+  });
+
+  bool? nsfw;
+  bool? religious;
+  bool? political;
+  bool? racist;
+  bool? sexist;
+  bool? explicit;
+
+  factory Flags.fromJson(Map<String, dynamic> json) => Flags(
+    nsfw: json["nsfw"],
+    religious: json["religious"],
+    political: json["political"],
+    racist: json["racist"],
+    sexist: json["sexist"],
+    explicit: json["explicit"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "nsfw": nsfw,
+    "religious": religious,
+    "political": political,
+    "racist": racist,
+    "sexist": sexist,
+    "explicit": explicit,
   };
 }
