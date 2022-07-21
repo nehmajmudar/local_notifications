@@ -10,28 +10,24 @@ String jokeModelToJson(JokeModel data) => json.encode(data.toJson());
 
 class JokeModel {
   JokeModel({
+    this.userId,
     this.id,
-    this.setup,
-    this.delivery,
-    this.lang,
+    this.title,
   });
 
+  int? userId;
   int? id;
-  String? setup;
-  String? delivery;
-  String? lang;
+  String? title;
 
   factory JokeModel.fromJson(Map<String, dynamic> json) => JokeModel(
-    id: json["id"],
-    setup: json["setup"],
-    delivery: json["delivery"],
-    lang: json["lang"],
+    userId: json["userId"]==null?null:json["userId"],
+    id: json["id"]==null?null:json["id"],
+    title: json["title"]==null?null:json["title"]
   );
 
   Map<String, dynamic> toJson() => {
+    "userId": userId,
     "id": id,
-    "setup": setup,
-    "delivery": delivery,
-    "lang": lang,
+    "title": title,
   };
 }

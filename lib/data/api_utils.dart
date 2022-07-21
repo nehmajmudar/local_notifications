@@ -1,3 +1,3 @@
 class ApiUtils{
-  static const String baseUrl="https://v2.jokeapi.dev/joke/Any";
+  static const String baseUrl="https://jsonplaceholder.typicode.com/albums";
 }

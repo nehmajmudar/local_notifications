@@ -15,16 +15,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context)=>JokeBloc(RepositoryProvider.of<JokeRepository>(context))..add(GetJoke()),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Local notifications',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const Home(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Local notifications',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const Home(),
     );
   }
 }

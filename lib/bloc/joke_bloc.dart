@@ -7,24 +7,35 @@ part 'joke_event.dart';
 part 'joke_state.dart';
 
 class JokeBloc extends Bloc<JokeEvent,JokeState>{
-  final JokeRepository jokeRepository;
 
-  JokeBloc(this.jokeRepository) : super(JokeLoadingState());
+  JokeBloc() : super(JokeInitial()){
+    final JokeRepository _jokeRepository=JokeRepository();
 
-  @override
-  Stream<JokeState?> mapEventToState(JokeEvent event)async*{
-    if(event is GetJoke){
-      yield JokeLoadingState();
-
+    on<GetJoke>((event, emit) async{
       try{
-        final jokeResponse=await jokeRepository.getJokeApi();
-        yield JokeLoadedState(jokeModel: jokeResponse!);
-      }
-      catch(e){
+        emit(JokeLoadingState());
+        final jokeResponse=await _jokeRepository.getJokeApi();
+        emit(JokeLoadedState(jokeModel: jokeResponse!));
+      }catch(e){
         print(e.toString());
-        yield JokeErrorState(error: e.toString());
+        emit(JokeErrorState(error: e.toString()));
       }
-    }
+    });
   }
 
+  // @override
+  // Stream<JokeState?> mapEventToState(JokeEvent event)async*{
+  //   if(event is GetJoke){
+  //     yield JokeLoadingState();
+  //
+  //     try{
+  //       final jokeResponse=await jokeRepository.getJokeApi();
+  //       yield JokeLoadedState(jokeModel: jokeResponse!);
+  //     }
+  //     catch(e){
+  //       print(e.toString());
+  //       yield JokeErrorState(error: e.toString());
+  //     }
+  //   }
+  // }
 }
